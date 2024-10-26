@@ -30,6 +30,7 @@ urlpatterns = [
     path('Coupons/' , include('apps.Coupons.urls')) , 
     path('Cart/' , include('apps.Cart.urls')),
     path('orders/', include('apps.orders.urls')),
+    path('Menu/', include('apps.Menu.urls')),
     # path('api/', include('apps.payment.urls')),
     path('coffee_app/', include('apps.coffe_app.urls'))
 

@@ -152,6 +152,7 @@ THIRD_PARTY_APPS =[
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'corsheaders',
+    'image_uploader_widget'
 ]
 
 
@@ -170,6 +171,7 @@ LOCAL_APPS =[
 # 'apps.payment',
 'apps.coffe_app',
 'import_export',
+'apps.Menu'
 
 ]
 

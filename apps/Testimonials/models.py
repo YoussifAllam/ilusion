@@ -10,7 +10,7 @@ class Testimonials(models.Model) :
 
     def __str__(self) -> str:
         return self.user_name
-    
+
     class Meta:
         verbose_name_plural = 'Testimonials'
         verbose_name = 'Testimonials'
@@ -25,10 +25,8 @@ class Replaises(models.Model) :
 
     def __str__(self) -> str:
         return self.user_name
-    
+
     class Meta:
         verbose_name_plural = 'Replies on Testimonials'
         verbose_name = 'Replies on Testimonials'
         ordering = ['-uploaded_at']
-
-

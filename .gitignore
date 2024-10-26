@@ -2,4 +2,5 @@ agaveproject/settings.py
 __pycache__
 __pycache__/
 settings.py
-
+db.sqlite3
+venv
