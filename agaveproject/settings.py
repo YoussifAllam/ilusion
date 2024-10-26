@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from os import path
+from os import path , getenv
 # import os
 
 from datetime import timedelta
@@ -36,11 +36,13 @@ ALLOWED_HOSTS = ['*' , ]
 
 
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.BasicAuthentication',
-#     ]
-# }
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+    ]
+}
 
 
 
@@ -130,6 +132,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
+
 DEFAULT_APPS  = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -159,6 +162,14 @@ LOCAL_APPS =[
 'apps.Shop' , 
 'apps.ConnectUs' ,
 'apps.Testimonials' , 
+'apps.Coupons' , 
+'apps.Popup' ,
+'apps.Cart'  , 
+'apps.Shipping' , 
+'apps.orders' , 
+# 'apps.payment',
+'apps.coffe_app',
+'import_export',
 
 ]
 
@@ -223,13 +234,29 @@ SITE_ID = 1  # This is required for Django Allauth, adjust if needed
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+
+#!__________________________________________________________________________________________________________________________
+
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
 EMAIL_USE_TLS= True
 EMAIL_USE_SSL =  False
-EMAIL_HOST_USER =  'speakingfingers5@gmail.com'
-EMAIL_HOST_PASSWORD =  'kdgq rlva loxe ywgu'
+EMAIL_HOST_USER =  'illusion.night.club1@gmail.com'
+EMAIL_HOST_PASSWORD = 'zyfq peod aruq kmtr'
 DEFAULT_FROM_EMAIL =  EMAIL_HOST_USER
+
+
+
+# ACC_SID = 'AC43572cf4ac4ac695d48736207c5ef4b3'
+# AUTH_TOKEN = '8ab3f9d8ccf13e22d2551f0996fb93ab'
+# TWILIO_CLIENT = Client(ACC_SID, AUTH_TOKEN)
+
+TWILIO_ACCOUNT_SID = 'AC43572cf4ac4ac695d48736207c5ef4b3'
+TWILIO_AUTH_TOKEN = '8ab3f9d8ccf13e22d2551f0996fb93ab'
+TWILIO_PHONE_NUMBER = 'whatsapp:+14155238886'  # This is the sandbox number
+
+#!__________________________________________________________________________________________________________________________
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -254,3 +281,24 @@ AUTHENTICATION_BACKENDS = [
     # 'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://backk.myagaveworld.com',
+]
+
+
+#* Celery __________________________________________________________________________________________________________________________
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL     = 'redis://localhost:6379'
+
+
+#* authorize.net ____________________________________________________________________________________________________________
+from environ import Env
+from dotenv import load_dotenv
+
+Env.read_env('.env')
+load_dotenv()
+
+AUTHORIZE_NET_API_LOGIN_ID  = getenv('AUTHORIZE_NET_API_LOGIN_ID')
+AUTHORIZE_NET_TRANSACTION_KEY = getenv('AUTHORIZE_NET_TRANSACTION_KEY')
+AUTHORIZE_NET_SANDBOX  = getenv('AUTHORIZE_NET_SANDBOX') # Set to False for production

@@ -23,6 +23,7 @@ def add_Testimonial(request):
     content = request.data.get('content')
     Target_user = request.user
     Target_date = {
+        'user': Target_user.id,
         'user_name' : Target_user.name,
         'content' : content , 
     }
@@ -46,6 +47,7 @@ def add_reply(request):
 
     target_data = {
         'Testimonial': testimonial.id,
+        'user' : target_user.id,
         'user_name': target_user.username,
         'content': content,
     }

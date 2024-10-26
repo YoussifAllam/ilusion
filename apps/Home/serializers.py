@@ -42,19 +42,16 @@ class RelatedProductSerializer(serializers.ModelSerializer):
         return 0
 
 class Category_Products_Serializer(serializers.ModelSerializer):
-    sizes = ProductSizeSerializer(many=True, read_only=True)
     images = ProductImageSerializer(many=True, read_only=True, source='productimages_set')
     average_rating = serializers.SerializerMethodField()
     number_of_ratings = serializers.SerializerMethodField()
     category = CategorySerializer(many=True, read_only=True, source='Product_category')
-    reviews = ProductRatingSerializer(many=True, read_only=True ,source='product_rating_set')
-    related_products = serializers.SerializerMethodField()
 
     class Meta:
         model = Products
-        fields = ['Product_id', 'Product_name','price_range' , 'sizes',  'SKU', 'category',
-                    'images', 'average_rating', 'number_of_ratings'  ,'Product_description', 'reviews', 'IS_spacial_product'
-                    , 'related_products'
+        fields = ['Product_id', 'Product_name','price_range' ,  'category',
+                    'images', 'average_rating', 'number_of_ratings'  ,'Product_description'
+                    
                   ]
 
     def get_average_rating(self, obj):
@@ -66,13 +63,15 @@ class Category_Products_Serializer(serializers.ModelSerializer):
     def get_number_of_ratings(self, obj):
         return obj.product_rating_set.count()
     
-    def get_related_products(self, obj):
-        related_products = Products.objects.filter(Product_category__in=obj.Product_category.all()).exclude(Product_id=obj.Product_id)[:4]
-        return RelatedProductSerializer(related_products, many=True).data
 
+
+class RatingDetailSerializer(serializers.Serializer):
+    stars = serializers.IntegerField()
+    # count = serializers.IntegerField()
+    product_count = serializers.IntegerField()
 
 class AverageRatingSerializer(serializers.Serializer):
-    average_rating = serializers.FloatField()
-    rating_count = serializers.IntegerField()
+    # rating_count = serializers.IntegerField()
+    ratings_detail = RatingDetailSerializer(many=True)
 
 

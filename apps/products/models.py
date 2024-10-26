@@ -3,7 +3,6 @@ from uuid import uuid4
 from django.core.validators import MaxValueValidator , MinValueValidator
 # Create your models here.
 
-
 class Products(models.Model):
     Product_id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     Product_name = models.CharField(max_length=50, verbose_name='Product name')
@@ -11,6 +10,9 @@ class Products(models.Model):
     Product_category = models.ManyToManyField('Category', verbose_name='Product Category')
     SKU = models.CharField(max_length=50, default='N/A', null=True, blank=True)
     IS_spacial_product = models.BooleanField(default=False)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    # uploadd_at = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.Product_name
@@ -23,11 +25,19 @@ class Products(models.Model):
         max_price = max(size.Product_regular_price for size in sizes)
         return f"${min_price} - ${max_price}"
 
+    def average_rating(self):
+        ratings = self.product_rating_set.all()
+        if ratings.count() == 0:
+            return 'No ratings'
+        average = ratings.aggregate(models.Avg('Rating_stars'))['Rating_stars__avg']
+        return round(average)  # Round to two decimal places
+
     class Meta:
         verbose_name = 'Products'
         verbose_name_plural = 'Products'
 
 class ProductSize(models.Model):
+    product_size_uuid = models.UUIDField( default=uuid4, editable=False , unique=True)
     product = models.ForeignKey('Products', related_name='sizes', on_delete=models.CASCADE)
     size = models.CharField(max_length=50, verbose_name='Size') 
     Product_regular_price = models.FloatField(verbose_name='Regular price $')
@@ -51,6 +61,11 @@ class Category(models.Model):
     def __str__(self):
         return self.Category_name
     
+    
+    class Meta:
+        verbose_name = 'Categories'
+        verbose_name_plural = 'Categories'
+    
 class Home_OurProducts(models.Model):
     name = models.CharField(max_length=200 , verbose_name= 'Name')
     Category = models.ForeignKey('Category', verbose_name='Category', on_delete=models.CASCADE , unique=True)
@@ -61,8 +76,8 @@ class Home_OurProducts(models.Model):
         return self.name
     
     class Meta:
-        verbose_name = 'Our Products'
-        verbose_name_plural = 'Our Products'
+        verbose_name = 'Our Products in Home page'
+        verbose_name_plural = 'Our Products in Home page'
 
 class Product_Rating(models.Model):
     Targer_Product = models.ForeignKey(Products , on_delete=models.CASCADE )
@@ -71,6 +86,7 @@ class Product_Rating(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     rate_content = models.TextField( verbose_name= 'Rate content')
 
+
     def __str__(self) -> str:
         return f"{self.Targer_Product} -- {self.User_Name}" 
 
@@ -78,5 +94,9 @@ class Product_Rating(models.Model):
         unique_together = (('User_Name', 'Targer_Product'))
         index_together  = (('User_Name', 'Targer_Product'))
 
-        verbose_name_plural = "Ratings"
-        verbose_name = 'Ratings'
+        verbose_name_plural = "Products Ratings"
+        verbose_name = 'Products Ratings'
+        
+        ordering = ['-uploaded_at']
+
+

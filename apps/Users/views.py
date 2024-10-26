@@ -24,11 +24,38 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework.parsers import MultiPartParser, FormParser
 
+from apps.Coupons.models import Coupon
+from apps.Popup.models import Popup
+from apps.Coupons.serializers import CouponSerializer
+
 import re   
 from django.utils.timezone import now
 User = get_user_model()
 
 from django.conf import settings
+
+def get_signup_descount():
+    signup_descount = Popup.objects.filter(id = 1).values_list('content', 'discount', 'is_active')
+
+    return( signup_descount)
+
+# get_signup_descount()
+
+def create_coupon():
+    discount , is_valid = get_signup_descount()[0][1], get_signup_descount()[0][2]
+    if not is_valid or discount == 0:
+        return 'coupon not available'
+    
+    code  = get_random_string(6)
+    valid_to = timezone.now() + timedelta(days=10)
+    
+    coupon = Coupon.objects.create(
+        code=code,
+        valid_to=valid_to,
+        discount=discount
+    )
+    
+    return coupon
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -46,7 +73,14 @@ class UserViewSet(viewsets.ModelViewSet):
                 'access': str(refresh.access_token),
             }
 
-            return Response({'user': serializer.data, 'tokens': token_data}, status=status.HTTP_201_CREATED)
+            coupon = create_coupon()
+            if isinstance(coupon, Coupon):
+                coupon_data = CouponSerializer(coupon).data
+            else:
+                coupon_data = coupon
+
+            return Response({'user': serializer.data, 'tokens': token_data
+                            , 'coupon' : coupon_data }, status=status.HTTP_201_CREATED)
         else:
             email_errors = serializer.errors.get('email', [])
             password_errors = serializer.errors.get('password', [])

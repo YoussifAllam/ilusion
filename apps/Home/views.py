@@ -5,38 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status  
 from apps.products.models import Products, Category,Home_OurProducts
 from rest_framework.pagination import PageNumberPagination
-from django.db.models import Avg, Count, Min, Max
+from .background_Tasks import check_sale_prices
+from .services import *
 
 
-# @api_view(['GET'])
-def get_shop_data(request):
-    # Get categories
-    categories = Category.objects.all()
-    categories_serializer = CategorySerializer(categories, many=True)
-
-    # Get average rating and rating count
-    rating_data = Product_Rating.objects.aggregate(
-        average_rating=Avg('Rating_stars'),
-        rating_count=Count('Rating_stars')
-    )
-    average_rating_serializer = AverageRatingSerializer(rating_data)
-
-    # Get price range
-    price_data = Products.objects.aggregate(
-        min_price=Min('sizes__Product_regular_price'),
-        max_price=Max('sizes__Product_regular_price')
-    )
-
-    # Construct response data
-    response_data = {
-        'categories': categories_serializer.data,
-        'average_rating': (average_rating_serializer.data['average_rating'] // 1),
-        'rating_count': average_rating_serializer.data['rating_count'],
-        'min_price': price_data['min_price'],
-        'max_price': price_data['max_price']
-    }
-
-    return Response(response_data)
 
 
 @api_view(['GET'])
@@ -80,16 +52,29 @@ def products_by_category(request):
     return Response(response_data, status=status.HTTP_200_OK)
 
 
+
 @api_view(['GET'])
 def Get_home_OurProducts(request):
+    
+    #background task to check is the sale price time is end then return it to 0
+    check_sale_prices.delay()
+
     products = Home_OurProducts.objects.all()
     serializer = Home_Products_Serializer(products, many=True)
     special_products = Products.objects.filter(IS_spacial_product=True)
     serializer2 = Category_Products_Serializer(special_products, many=True)
+    Popup_data = get_signup_descount()
+    Popup_data = {
+        'content' : Popup_data[0][0],
+        'discount' : Popup_data[0][1],
+        'is_active' : Popup_data[0][2]
+    }
     return Response(
         {
         'status':'success',
+
         'data' : {
+            'Popup' : Popup_data  ,
         'OUR PRODUCTS': serializer.data , 
         'SPECIAL PRODUCTS' : serializer2.data
         }
