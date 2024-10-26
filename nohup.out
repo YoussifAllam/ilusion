@@ -15952,3 +15952,21 @@ products.Home_OurProducts.Category: (fields.W342) Setting unique=True on a Forei
 	HINT: ForeignKey(unique=True) is usually better served by a OneToOneField.
 
 System check identified 1 issue (0 silenced).
+/opt/agaveproject/agaveproject/settings.py changed, reloading.
+Performing system checks...
+
+October 26, 2024 - 14:22:44
+Django version 5.0.2, using settings 'agaveproject.settings'
+Starting development server at http://0.0.0.0:8081/
+Quit the server with CONTROL-C.
+
+/opt/agavevenv/lib/python3.10/site-packages/environ/environ.py:648: UserWarning: Error reading .env - if you're not configuring your environment separately, check this.
+  warnings.warn(
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+products.Home_OurProducts.Category: (fields.W342) Setting unique=True on a ForeignKey has the same effect as using a OneToOneField.
+	HINT: ForeignKey(unique=True) is usually better served by a OneToOneField.
+
+System check identified 1 issue (0 silenced).
