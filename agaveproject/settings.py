@@ -250,11 +250,6 @@ DEFAULT_FROM_EMAIL =  EMAIL_HOST_USER
 # ACC_SID = 'AC43572cf4ac4ac695d48736207c5ef4b3'
 # AUTH_TOKEN = '8ab3f9d8ccf13e22d2551f0996fb93ab'
 # TWILIO_CLIENT = Client(ACC_SID, AUTH_TOKEN)
-
-TWILIO_ACCOUNT_SID = 'AC43572cf4ac4ac695d48736207c5ef4b3'
-TWILIO_AUTH_TOKEN = '8ab3f9d8ccf13e22d2551f0996fb93ab'
-TWILIO_PHONE_NUMBER = 'whatsapp:+14155238886'  # This is the sandbox number
-
 #!__________________________________________________________________________________________________________________________
 
 
